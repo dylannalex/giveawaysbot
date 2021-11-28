@@ -16,4 +16,4 @@ SUPPORT_MESSAGES = [
 
 
 def generate_message(wallet) -> str:
-    return f"{choice(INTERJECTIONS)}, {SUPPORT_MESSAGES}! \n\n{wallet}"
+    return f"{choice(INTERJECTIONS)}, {choice(SUPPORT_MESSAGES)}! \n\n{wallet}"
