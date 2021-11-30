@@ -14,7 +14,7 @@ def start_bot(argv) -> None:
     bot.login()
     for _ in range(GIVEAWAY_PARTICIPATIONS):
         for giveaway in giveaways:
-            bot.join_giveaway(giveaway, message.generate_message(wallet))
+            bot.join_giveaway(giveaway, wallet)
 
 
 if __name__ == "__main__":

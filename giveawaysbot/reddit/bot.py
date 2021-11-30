@@ -2,6 +2,7 @@ from time import sleep
 from giveawaysbot.selenium_bot import SeleniumBot
 from giveawaysbot.selenium_bot import try_action
 from giveawaysbot import settings
+from giveawaysbot import message
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -29,14 +30,12 @@ class RedditBot(SeleniumBot):
         self.driver.get(reddit_search_link)
         return self._get_posts_links(self.get_links())
 
-    def join_giveaway(self, link, message):
+    def join_giveaway(self, link, wallet):
         self._safely_get_to_link(link)
-        self._reply_post(message)
+        msg = message.generate_message(wallet, self._get_post_text())
+        self._reply_post(msg)
         self.driver.get(link)
-        message_sent = message.split("\n")[0]
-        print(
-            f"\n\n[GIVEAWAY] successfully replied to {link} with message '{message_sent}'"
-        )
+        print(f"\n\n[GIVEAWAY] successfully replied to {link}.")
 
     @try_action
     def _safely_get_to_link(self, link):
@@ -71,3 +70,10 @@ class RedditBot(SeleniumBot):
             By.XPATH,
             "//*[@id='SHORTCUT_FOCUSABLE_DIV']/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]/div[3]/div[2]/div/div/div[3]/div[1]/button",
         ).click()
+
+    def _get_post_text(self):
+        return (
+            self.driver.find_element_by_tag_name("body")
+            .get_attribute("innerText")
+            .lower()
+        )
