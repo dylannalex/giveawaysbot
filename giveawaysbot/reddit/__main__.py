@@ -2,6 +2,7 @@ from sys import argv
 from giveawaysbot import message
 from giveawaysbot.reddit import bot as reddit_bot
 from giveawaysbot.reddit import links
+from giveawaysbot.settings import GIVEAWAY_PARTICIPATIONS
 
 
 def start_bot(argv) -> None:
@@ -11,8 +12,9 @@ def start_bot(argv) -> None:
     if not giveaways:
         return
     bot.login()
-    for giveaway in giveaways:
-        bot.join_giveaway(giveaway, message.generate_message(wallet))
+    for _ in range(GIVEAWAY_PARTICIPATIONS):
+        for giveaway in giveaways:
+            bot.join_giveaway(giveaway, message.generate_message(wallet))
 
 
 if __name__ == "__main__":
