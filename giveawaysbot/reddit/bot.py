@@ -71,6 +71,7 @@ class RedditBot(SeleniumBot):
             "//*[@id='SHORTCUT_FOCUSABLE_DIV']/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]/div[3]/div[2]/div/div/div[3]/div[1]/button",
         ).click()
 
+    @try_action
     def _get_post_text(self):
         return (
             self.driver.find_element_by_tag_name("body")
