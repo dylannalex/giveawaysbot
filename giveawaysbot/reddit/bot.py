@@ -45,7 +45,7 @@ class RedditBot(SeleniumBot):
         """
         Finds reddit post links from a given list of links
         """
-        return [link for link in links if "comments" in link]
+        return [link for link in links if "comments" in link and "nft" in link]
 
     @try_action
     def _reply_post(self, message):
