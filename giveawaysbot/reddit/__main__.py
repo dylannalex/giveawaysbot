@@ -17,8 +17,8 @@ def start_bot(argv) -> None:
     if not giveaways:
         return
     bot.login()
-    for _ in range(GIVEAWAY_PARTICIPATIONS):
-        for giveaway in giveaways:
+    for giveaway in giveaways:
+        for _ in range(GIVEAWAY_PARTICIPATIONS):
             bot.join_giveaway(giveaway, wallet)
 
 
