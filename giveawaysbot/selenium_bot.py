@@ -38,15 +38,21 @@ class SeleniumBot(ABC):
         return list(dict.fromkeys(links))
 
 
-def try_action(function):
-    def wrapper(*args, **kwargs):
-        for try_ in range(SeleniumBot.ACTION_TRIES):
-            try:
-                return function(*args, **kwargs)
-            except Exception:
-                print(
-                    f"[ERROR] {SeleniumBot.ACTION_TRIES - try_ + 1} tries left. Retrying in {settings.SLEEP_SECONDS}."
-                )
-                sleep(settings.SLEEP_SECONDS)
+def try_action(error_type="Error", show_error_message=True):
+    def wrap(f):
+        def wrapped_f(*args, **kwargs):
+            print(f"[STATUS] Running {f.__name__}")
+            for try_ in range(SeleniumBot.ACTION_TRIES):
+                try:
+                    return f(*args, **kwargs)
+                except Exception:
+                    if show_error_message:
+                        print(
+                            f"[{error_type}] {SeleniumBot.ACTION_TRIES - try_} tries left. Retrying in {settings.SLEEP_SECONDS} sec"
+                        )
+                    sleep(settings.SLEEP_SECONDS)
+            print(f"[FATAL ERROR] Could not complete {f.__name__} execution")
 
-    return wrapper
+        return wrapped_f
+
+    return wrap

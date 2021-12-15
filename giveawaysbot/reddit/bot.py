@@ -25,7 +25,7 @@ class RedditBot(SeleniumBot):
         )
         sleep(settings.SLEEP_SECONDS)
 
-    @try_action
+    @try_action(None, False)
     def search_giveaways(self, reddit_search_link):
         self.driver.get(reddit_search_link)
         return self._get_posts_links(self.get_links())
@@ -35,9 +35,9 @@ class RedditBot(SeleniumBot):
         msg = message.generate_message(wallet, self._get_post_text())
         self._reply_post(msg)
         self.driver.get(link)
-        print(f"\n\n[GIVEAWAY] successfully replied to {link}.")
+        print(f"[GIVEAWAY JOINED] successfully replied to {link}")
 
-    @try_action
+    @try_action(None, False)
     def _safely_get_to_link(self, link):
         self.driver.get(link)
 
@@ -47,7 +47,7 @@ class RedditBot(SeleniumBot):
         """
         return [link for link in links if "comments" in link and "nft" in link]
 
-    @try_action
+    @try_action("ReplyingPostError")
     def _reply_post(self, message):
         self._write_reply(message)
         self._press_send_button()
@@ -63,7 +63,7 @@ class RedditBot(SeleniumBot):
             )
         ).send_keys(message)
 
-    @try_action
+    @try_action(None, False)
     def _press_send_button(self):
         sleep(settings.SLEEP_SECONDS)
         self.driver.find_element(
@@ -71,7 +71,7 @@ class RedditBot(SeleniumBot):
             "//*[@id='SHORTCUT_FOCUSABLE_DIV']/div[2]/div/div/div/div[2]/div[3]/div[1]/div[2]/div[3]/div[2]/div/div/div[3]/div[1]/button",
         ).click()
 
-    @try_action
+    @try_action(None, False)
     def _get_post_text(self):
         return (
             self.driver.find_element_by_tag_name("body")
