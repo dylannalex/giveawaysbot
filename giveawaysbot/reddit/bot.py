@@ -32,11 +32,15 @@ class RedditBot(SeleniumBot):
         return self._get_posts_links(self.get_links())
 
     def join_giveaway(self, link, wallet):
+        old_replies_sent = self.replies_sent
         self._safely_get_to_link(link)
         msg = message.generate_message(wallet, self._get_post_text())
         self._reply_post(msg)
         self.driver.get(link)
-        print(f"[GIVEAWAY JOINED] successfully replied to {link}")
+        if self.replies_sent > old_replies_sent:
+            print(f"[GIVEAWAY JOINED] successfully replied to {link}")
+        else:
+            print(f"[GIVEAWAY ABORTED] could not reply to {link}")
 
     @try_action(None, False)
     def _safely_get_to_link(self, link):
