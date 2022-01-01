@@ -3,6 +3,7 @@ from giveawaysbot.selenium_bot import SeleniumBot
 from giveawaysbot.selenium_bot import try_action
 from giveawaysbot import settings
 from giveawaysbot import message
+from giveawaysbot.reddit import elements
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -55,21 +56,13 @@ class RedditBot(SeleniumBot):
 
     def _write_reply(self, message):
         WebDriverWait(self.driver, settings.SLEEP_SECONDS).until(
-            EC.element_to_be_clickable(
-                (
-                    By.XPATH,
-                    '//*[@id="SHORTCUT_FOCUSABLE_DIV"]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div[3]/div[2]/div/div/div[2]/div/div[1]/div/div/div',
-                )
-            )
+            EC.element_to_be_clickable((By.XPATH, elements.TEXT_BOX_XPATH))
         ).send_keys(message)
 
     @try_action(None, False)
     def _press_send_button(self):
         sleep(settings.SLEEP_SECONDS)
-        self.driver.find_element(
-            By.XPATH,
-            '//*[@id="SHORTCUT_FOCUSABLE_DIV"]/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div[3]/div[2]/div/div/div[3]/div[1]/button',
-        ).click()
+        self.driver.find_element(By.XPATH, elements.SEND_BUTTON_XPATH).click()
 
     @try_action(None, False)
     def _get_post_text(self):
